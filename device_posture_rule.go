@@ -27,12 +27,19 @@ type DevicePostureRuleMatch struct {
 
 // DevicePostureRuleInput represents the value to be checked against.
 type DevicePostureRuleInput struct {
-	ID         string `json:"id,omitempty"`
-	Path       string `json:"path,omitempty"`
-	Exists     bool   `json:"exists,omitempty"`
-	Thumbprint string `json:"thumbprint,omitempty"`
-	Sha256     string `json:"sha256,omitempty"`
-	Running    bool   `json:"running,omitempty"`
+	ID              string `json:"id,omitempty"`
+	Path            string `json:"path,omitempty"`
+	Exists          bool   `json:"exists,omitempty"`
+	Thumbprint      string `json:"thumbprint,omitempty"`
+	Sha256          string `json:"sha256,omitempty"`
+	Running         bool   `json:"running,omitempty"`
+	RequireAll      bool   `json:"require_all,omitempty"`
+	Enabled         bool   `json:"enabled,omitempty"`
+	Version         string `json:"version,omitempty"`
+	Operator        string `json:"operator,omitempty"`
+	Domain          string `json:"domain,omitempty"`
+	Port            string `json:"port,omitempty"`
+	VerificationKey string `json:"verification_key,omitempty"`
 }
 
 // DevicePostureRuleListResponse represents the response from the list
