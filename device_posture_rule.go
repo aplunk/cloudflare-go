@@ -9,7 +9,8 @@ import (
 	"github.com/pkg/errors"
 )
 
-// DevicePostureIntegrationConfig contains authentication information for a device posture integration.
+// DevicePostureIntegrationConfig contains authentication information
+// for a device posture integration.
 type DevicePostureIntegrationConfig struct {
 	ClientID     string `json:"client_id,omitempty"`
 	ClientSecret string `json:"client_secret,omitempty"`
@@ -23,7 +24,6 @@ type DevicePostureIntegration struct {
 	Name          string                         `json:"name,omitempty"`
 	Type          string                         `json:"type,omitempty"`
 	Interval      string                         `json:"interval,omitempty"`
-	Identifier    string                         `json:"identifier,omitempty"`
 	Config        DevicePostureIntegrationConfig `json:"config,omitempty"`
 }
 
@@ -46,61 +46,62 @@ type DevicePostureIntegrationListResponse struct {
 // CreateDevicePostureIntegration creates a device posture integration within an account.
 //
 // API reference: TODO
-func (api *API) CreateDevicePostureIntegration(ctx context.Context, accountID string, integration DevicePostureIntegration) (DevicePostureIntegration, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/posture/integration", AccountRouteRoot, accountID)
+func (api *API) CreateDevicePostureIntegration(ctx context.Context, accountID string, integration DevicePostureIntegration, testCredentials bool) (DevicePostureIntegration, error) {
+	uri := fmt.Sprintf("/%s/%s/devices/posture/integration?test=%t", AccountRouteRoot, accountID, testCredentials)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, integration)
 	if err != nil {
-		return DevicePostureIntegration{}, ResultInfo{}, err
+		fmt.Printf("err:%+v res:%+v\n", err, res)
+		return DevicePostureIntegration{}, err
 	}
 
 	var devicePostureIntegrationResponse DevicePostureIntegrationResponse
 	err = json.Unmarshal(res, &devicePostureIntegrationResponse)
 	if err != nil {
-		return DevicePostureIntegration{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureIntegration{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return devicePostureIntegrationResponse.Result, devicePostureIntegrationResponse.ResultInfo, nil
+	return devicePostureIntegrationResponse.Result, nil
 }
 
 // UpdateDevicePostureIntegration updates a device posture integration within an account.
 //
 // API reference: TODO
-func (api *API) UpdateDevicePostureIntegration(ctx context.Context, accountID string, integration DevicePostureIntegration) (DevicePostureIntegration, ResultInfo, error) {
-	uri := fmt.Sprintf("/%s/%s/devices/posture/integration/%s", AccountRouteRoot, accountID, integration.IntegrationID)
+func (api *API) UpdateDevicePostureIntegration(ctx context.Context, accountID string, integration DevicePostureIntegration, testCredentials bool) (DevicePostureIntegration, error) {
+	uri := fmt.Sprintf("/%s/%s/devices/posture/integration/%s?test=%t", AccountRouteRoot, accountID, integration.IntegrationID, testCredentials)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, integration)
 	if err != nil {
-		return DevicePostureIntegration{}, ResultInfo{}, err
+		return DevicePostureIntegration{}, err
 	}
 
 	var devicePostureIntegrationResponse DevicePostureIntegrationResponse
 	err = json.Unmarshal(res, &devicePostureIntegrationResponse)
 	if err != nil {
-		return DevicePostureIntegration{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureIntegration{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return devicePostureIntegrationResponse.Result, devicePostureIntegrationResponse.ResultInfo, nil
+	return devicePostureIntegrationResponse.Result, nil
 }
 
 // DevicePostureIntegration returns a specific device posture integrations within an account.
 //
 // API reference: TODO
-func (api *API) DevicePostureIntegration(ctx context.Context, accountID, integrationID string) (DevicePostureIntegration, ResultInfo, error) {
+func (api *API) DevicePostureIntegration(ctx context.Context, accountID, integrationID string) (DevicePostureIntegration, error) {
 	uri := fmt.Sprintf("/%s/%s/devices/posture/integration/%s", AccountRouteRoot, accountID, integrationID)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return DevicePostureIntegration{}, ResultInfo{}, err
+		return DevicePostureIntegration{}, err
 	}
 
 	var devicePostureIntegrationResponse DevicePostureIntegrationResponse
 	err = json.Unmarshal(res, &devicePostureIntegrationResponse)
 	if err != nil {
-		return DevicePostureIntegration{}, ResultInfo{}, errors.Wrap(err, errUnmarshalError)
+		return DevicePostureIntegration{}, errors.Wrap(err, errUnmarshalError)
 	}
 
-	return devicePostureIntegrationResponse.Result, devicePostureIntegrationResponse.ResultInfo, nil
+	return devicePostureIntegrationResponse.Result, nil
 }
 
 // DevicePostureIntegrations returns all device posture integrations within an account.
