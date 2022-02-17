@@ -16,6 +16,8 @@ type DevicePostureIntegrationConfig struct {
 	ClientSecret string `json:"client_secret,omitempty"`
 	AuthUrl      string `json:"auth_url,omitempty"`
 	ApiUrl       string `json:"api_url,omitempty"`
+	ClientKey    string `json:"client_key,omitempty"`
+	CustomerID   string `json:"customer_id,omitempty"`
 }
 
 // DevicePostureIntegration represents a device posture integration.
@@ -174,6 +176,8 @@ type DevicePostureRuleInput struct {
 	Domain           string `json:"domain,omitempty"`
 	ComplianceStatus string `json:"compliance_status,omitempty"`
 	ConnectionID     string `json:"connection_id,omitempty"`
+	Score            int    `json:"score,omitempty"`
+	ScoreOperator    int    `json:"scoreOperator,omitempty"`
 }
 
 // DevicePostureRuleListResponse represents the response from the list
